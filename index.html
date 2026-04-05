@@ -617,24 +617,18 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-            const isAdmin = localStorage.getItem('isAdmin') === 'true';
+            // Clean up any old auto-login logic from browser memory
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('isAdmin');
 
-            if (isAdmin) {
-                window.currentUserRole = 'admin';
-                showMainContent();
-            } else if (isLoggedIn) {
-                window.currentUserRole = 'creator';
-                showMainContent();
-            } else {
-                document.getElementById('login-container').style.display = 'block';
-            }
+            // ALWAYS show the login page when re-opening or refreshing the page
+            document.getElementById('login-container').style.display = 'block';
 
-            if (localStorage.getItem('mamaearth_submitted') === 'true') {
-                disableAgreement('mama');
-            }
-            if (localStorage.getItem('gaming_submitted') === 'true') {
-                disableAgreement('gaming');
+            // If Remember Me was checked previously, prefill the fields
+            if (localStorage.getItem('rememberMe') === 'true') {
+                document.getElementById('username').value = localStorage.getItem('savedUser') || '';
+                document.getElementById('password').value = localStorage.getItem('savedPass') || '';
+                document.getElementById('remember').checked = true;
             }
         });
 
@@ -657,12 +651,14 @@
                 window.currentUserRole = role;
 
                 if (remember) {
-                    if (role === 'admin') localStorage.setItem('isAdmin', 'true');
-                    else localStorage.setItem('isLoggedIn', 'true');
+                    // Just save the credentials for the next time they open the page
+                    localStorage.setItem('rememberMe', 'true');
+                    localStorage.setItem('savedUser', user);
+                    localStorage.setItem('savedPass', pass);
                 } else {
-                    // Make sure it's cleared if they didn't check remember this time
-                    localStorage.removeItem('isAdmin');
-                    localStorage.removeItem('isLoggedIn');
+                    localStorage.removeItem('rememberMe');
+                    localStorage.removeItem('savedUser');
+                    localStorage.removeItem('savedPass');
                 }
 
                 document.getElementById('login-container').style.display = 'none';
