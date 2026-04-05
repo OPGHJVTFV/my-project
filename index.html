@@ -617,8 +617,8 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true' || sessionStorage.getItem('isLoggedIn') === 'true';
-            const isAdmin = localStorage.getItem('isAdmin') === 'true' || sessionStorage.getItem('isAdmin') === 'true';
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const isAdmin = localStorage.getItem('isAdmin') === 'true';
 
             if (isAdmin) {
                 window.currentUserRole = 'admin';
@@ -660,8 +660,9 @@
                     if (role === 'admin') localStorage.setItem('isAdmin', 'true');
                     else localStorage.setItem('isLoggedIn', 'true');
                 } else {
-                    if (role === 'admin') sessionStorage.setItem('isAdmin', 'true');
-                    else sessionStorage.setItem('isLoggedIn', 'true');
+                    // Make sure it's cleared if they didn't check remember this time
+                    localStorage.removeItem('isAdmin');
+                    localStorage.removeItem('isLoggedIn');
                 }
 
                 document.getElementById('login-container').style.display = 'none';
