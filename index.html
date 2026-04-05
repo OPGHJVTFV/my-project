@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -129,7 +130,8 @@
             color: #111827;
         }
 
-        .section p, .section ul {
+        .section p,
+        .section ul {
             font-size: 0.9375rem;
             color: #374151;
             margin: 0 0 0.5rem 0;
@@ -180,8 +182,8 @@
             cursor: pointer;
             user-select: none;
         }
-        
-        .checkbox-container input:disabled + label {
+
+        .checkbox-container input:disabled+label {
             cursor: not-allowed;
             color: #6b7280;
         }
@@ -213,7 +215,10 @@
         /* Modal Styles */
         .modal-overlay {
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background: rgba(17, 24, 39, 0.4);
             display: flex;
             align-items: center;
@@ -293,8 +298,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @media (max-width: 600px) {
@@ -302,214 +314,441 @@
                 flex-direction: column;
                 gap: 1rem;
             }
+
             .document-card {
                 padding: 2rem 1.5rem;
             }
+
             body {
                 padding: 1rem;
             }
         }
+
+        /* Login Styles */
+        .login-container {
+            max-width: 400px;
+            margin: 4rem auto;
+            background: #fff;
+            padding: 3rem 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e5e7eb;
+            display: none;
+        }
+
+        .login-container h2 {
+            margin-top: 0;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-size: 1.5rem;
+            color: #111827;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="password"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        .form-group input[type="text"]:focus,
+        .form-group input[type="password"]:focus {
+            outline: none;
+            border-color: #111827;
+            box-shadow: 0 0 0 1px #111827;
+        }
+
+        .remember-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .remember-group input {
+            cursor: pointer;
+            width: 1rem;
+            height: 1rem;
+            accent-color: #111827;
+        }
+
+        .remember-group label {
+            font-size: 0.875rem;
+            color: #374151;
+            cursor: pointer;
+        }
+
+        .login-btn {
+            width: 100%;
+            background-color: #111827;
+            color: #ffffff;
+            border: none;
+            padding: 0.875rem;
+            font-size: 1rem;
+            font-weight: 500;
+            font-family: inherit;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .login-btn:hover {
+            background-color: #374151;
+        }
+
+        .error-msg {
+            color: #dc2626;
+            font-size: 0.875rem;
+            margin-top: -1rem;
+            margin-bottom: 1rem;
+            display: none;
+            text-align: center;
+        }
     </style>
 </head>
+
 <body>
 
-<div class="container">
-    <div class="tabs">
-        <button class="tab-btn active" onclick="switchCard('mamaearth', event)">Mamaearth</button>
-        <button class="tab-btn" onclick="switchCard('gaming', event)">567r (Betting)</button>
+    <div class="login-container" id="login-container">
+        <h2>Creator Login</h2>
+        <form onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Enter username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter password" required>
+            </div>
+            <div id="error-msg" class="error-msg"></div>
+            <div class="remember-group">
+                <input type="checkbox" id="remember">
+                <label for="remember">Remember me</label>
+            </div>
+            <button type="submit" class="login-btn">Submit Request</button>
+        </form>
     </div>
 
-    <!-- Mamaearth Agreement -->
-    <div id="mamaearth" class="document-card active">
-        <div class="header">
-            <h1>Influencer Agreement</h1>
-            <p>Effective Date: 05-04-2026</p>
+    <div class="container" id="main-container" style="display: none;">
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchCard('mamaearth', event)">Mamaearth</button>
+            <button class="tab-btn" onclick="switchCard('gaming', event)">567r (Betting)</button>
         </div>
 
-        <div class="parties">
-            <div class="party">
-                <div class="party-label">Agency</div>
-                <div class="party-value">Scorix</div>
+        <!-- Mamaearth Agreement -->
+        <div id="mamaearth" class="document-card active">
+            <div class="header">
+                <h1>Influencer Agreement</h1>
+                <p>Effective Date: 05-04-2026</p>
             </div>
-            <div class="party">
-                <div class="party-label">Brand</div>
-                <div class="party-value">Mamaearth</div>
+
+            <div class="parties">
+                <div class="party">
+                    <div class="party-label">Agency</div>
+                    <div class="party-value">Scorix</div>
+                </div>
+                <div class="party">
+                    <div class="party-label">Brand</div>
+                    <div class="party-value">Mamaearth</div>
+                </div>
+                <div class="party">
+                    <div class="party-label">Creator</div>
+                    <div class="party-value">Shivangi Yadav</div>
+                </div>
             </div>
-            <div class="party">
-                <div class="party-label">Creator</div>
-                <div class="party-value">Shibangi Yadav</div>
+
+            <div class="section">
+                <h2>1. Introduction</h2>
+                <p>This Agreement outlines the terms and conditions under which the Creator will provide promotional
+                    content for the Brand, as managed by the Agency. The Agency acts as a liaison between the Brand and
+                    the Creator to ensure the successful execution of the promotional campaign.</p>
+            </div>
+
+            <div class="section">
+                <h2>2. Scope of Work & Deliverables</h2>
+                <p>The Creator agrees to produce, deliver, and publish social media content endorsing the Brand's
+                    products/services:</p>
+                <ul>
+                    <li><strong>Total Deliverables:</strong> Seven (7) Reels (May Campaign)</li>
+                    <li><strong>Posting Frequency:</strong> Two (2) Reels per month until total deliverables are met.
+                    </li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>3. Payment Terms</h2>
+                <p>In consideration of the full and satisfactory performance of the deliverables outlined above, the
+                    Creator shall be compensated as follows:</p>
+                <ul>
+                    <li><strong>Total Compensation:</strong> ₹20,000</li>
+                    <li><strong>Advance Payment:</strong> 50% (₹10,000) will be paid in advance upon the approval of the
+                        demo content.</li>
+                    <li><strong>Final Payment:</strong> 50% (₹10,000) will be paid upon the successful completion and
+                        publishing of all required deliverables.</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>4. Content Guidelines & Usage</h2>
+                <ul>
+                    <li>The Creator must secure written approval for the demo from the Brand/Agency prior to any public
+                        posting.</li>
+                    <li><strong>Content Retention:</strong> The Creator must keep the content live on their profile and
+                        ensure it is not deleted, archived, or hidden for at least <strong>five (5) days</strong>.</li>
+                    <li><strong>Usage Rights:</strong> The Creator grants the Brand and the Agency the full usage rights
+                        to repurpose and utilize the generated content for promotional purposes.</li>
+                </ul>
+            </div>
+
+            <hr>
+
+            <div class="agreement-section">
+                <div class="checkbox-container">
+                    <input type="checkbox" id="chk-mama">
+                    <label for="chk-mama">I agree to the terms and conditions mentioned above.</label>
+                </div>
+                <button id="btn-mama" class="submit-btn" disabled onclick="submitForm('Mamaearth')">Submit
+                    Agreement</button>
             </div>
         </div>
 
-        <div class="section">
-            <h2>1. Introduction</h2>
-            <p>This Agreement outlines the terms and conditions under which the Creator will provide promotional content for the Brand, as managed by the Agency. The Agency acts as a liaison between the Brand and the Creator to ensure the successful execution of the promotional campaign.</p>
-        </div>
-
-        <div class="section">
-            <h2>2. Scope of Work & Deliverables</h2>
-            <p>The Creator agrees to produce, deliver, and publish social media content endorsing the Brand's products/services:</p>
-            <ul>
-                <li><strong>Total Deliverables:</strong> Seven (7) Reels (May Campaign)</li>
-                <li><strong>Posting Frequency:</strong> Two (2) Reels per month until total deliverables are met.</li>
-            </ul>
-        </div>
-
-        <div class="section">
-            <h2>3. Payment Terms</h2>
-            <p>In consideration of the full and satisfactory performance of the deliverables outlined above, the Creator shall be compensated as follows:</p>
-            <ul>
-                <li><strong>Total Compensation:</strong> ₹20,000</li>
-                <li><strong>Advance Payment:</strong> 50% (₹10,000) will be paid in advance upon the approval of the demo content.</li>
-                <li><strong>Final Payment:</strong> 50% (₹10,000) will be paid upon the successful completion and publishing of all required deliverables.</li>
-            </ul>
-        </div>
-
-        <div class="section">
-            <h2>4. Content Guidelines & Usage</h2>
-            <ul>
-                <li>The Creator must secure written approval for the demo from the Brand/Agency prior to any public posting.</li>
-                <li><strong>Content Retention:</strong> The Creator must keep the content live on their profile and ensure it is not deleted, archived, or hidden for at least <strong>five (5) days</strong>.</li>
-                <li><strong>Usage Rights:</strong> The Creator grants the Brand and the Agency the full usage rights to repurpose and utilize the generated content for promotional purposes.</li>
-            </ul>
-        </div>
-
-        <hr>
-
-        <div class="agreement-section">
-            <div class="checkbox-container">
-                <input type="checkbox" id="chk-mama">
-                <label for="chk-mama">I agree to the terms and conditions mentioned above.</label>
+        <!-- 567r Agreement -->
+        <div id="gaming" class="document-card">
+            <div class="header">
+                <h1>Influencer Agreement</h1>
+                <p>Effective Date: 05-04-2026</p>
             </div>
-            <button id="btn-mama" class="submit-btn" disabled onclick="submitForm('Mamaearth')">Submit Agreement</button>
+
+            <div class="parties">
+                <div class="party">
+                    <div class="party-label">Agency</div>
+                    <div class="party-value">Scorix</div>
+                </div>
+                <div class="party">
+                    <div class="party-label">Brand</div>
+                    <div class="party-value">567r (Betting Brand)</div>
+                </div>
+                <div class="party">
+                    <div class="party-label">Creator</div>
+                    <div class="party-value">Shivangi Yadav</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>1. Introduction</h2>
+                <p>This Agreement outlines the terms and conditions under which the Creator will provide promotional
+                    content for the Brand, as managed by the Agency. The Agency acts as a liaison between the Brand and
+                    the Creator to ensure the successful execution of the promotional campaign.</p>
+            </div>
+
+            <div class="section">
+                <h2>2. Scope of Work & Deliverables</h2>
+                <p>The Creator agrees to produce, deliver, and publish social media content endorsing the Brand's
+                    products/services:</p>
+                <ul>
+                    <li><strong>Deliverables:</strong> One (1) Reel & Two (2) Stories</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>3. Payment Terms</h2>
+                <p>In consideration of the full and satisfactory performance of the deliverables outlined above, the
+                    Creator shall be compensated as follows:</p>
+                <ul>
+                    <li><strong>Total Compensation:</strong> ₹18,000</li>
+                    <li><strong>Payment Timeline:</strong> The payment will be made in full within <strong>two (2)
+                            days</strong> after the completion and publishing of all deliverables.</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>4. Content Guidelines & Usage</h2>
+                <ul>
+                    <li><strong>Content Retention:</strong> The Creator must keep the content live on their profile and
+                        ensure it is not deleted, archived, or hidden for at least <strong>five (5) days</strong>.</li>
+                    <li><strong>Usage Rights:</strong> The Creator grants the Brand and the Agency the full usage rights
+                        to repurpose and utilize the generated content for promotional purposes.</li>
+                </ul>
+            </div>
+
+            <hr>
+
+            <div class="agreement-section">
+                <div class="checkbox-container">
+                    <input type="checkbox" id="chk-gaming">
+                    <label for="chk-gaming">I agree to the terms and conditions mentioned above.</label>
+                </div>
+                <button id="btn-gaming" class="submit-btn" disabled onclick="submitForm('567r')">Submit
+                    Agreement</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Success Modal Overlay -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal">
+            <div class="modal-icon">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+            </div>
+            <h3>Done!</h3>
+            <p id="modalMessage">Agreement has been successfully submitted.</p>
+            <button class="modal-btn" onclick="closeModal()">Close</button>
         </div>
     </div>
 
-    <!-- 567r Agreement -->
-    <div id="gaming" class="document-card">
-        <div class="header">
-            <h1>Influencer Agreement</h1>
-            <p>Effective Date: 05-04-2026</p>
-        </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true' || sessionStorage.getItem('isLoggedIn') === 'true';
+            const isAdmin = localStorage.getItem('isAdmin') === 'true' || sessionStorage.getItem('isAdmin') === 'true';
 
-        <div class="parties">
-            <div class="party">
-                <div class="party-label">Agency</div>
-                <div class="party-value">Scorix</div>
-            </div>
-            <div class="party">
-                <div class="party-label">Brand</div>
-                <div class="party-value">567r (Betting Brand)</div>
-            </div>
-            <div class="party">
-                <div class="party-label">Creator</div>
-                <div class="party-value">Shibangi Yadav</div>
-            </div>
-        </div>
+            if (isAdmin) {
+                window.currentUserRole = 'admin';
+                showMainContent();
+            } else if (isLoggedIn) {
+                window.currentUserRole = 'creator';
+                showMainContent();
+            } else {
+                document.getElementById('login-container').style.display = 'block';
+            }
 
-        <div class="section">
-            <h2>1. Introduction</h2>
-            <p>This Agreement outlines the terms and conditions under which the Creator will provide promotional content for the Brand, as managed by the Agency. The Agency acts as a liaison between the Brand and the Creator to ensure the successful execution of the promotional campaign.</p>
-        </div>
+            if (localStorage.getItem('mamaearth_submitted') === 'true') {
+                disableAgreement('mama');
+            }
+            if (localStorage.getItem('gaming_submitted') === 'true') {
+                disableAgreement('gaming');
+            }
+        });
 
-        <div class="section">
-            <h2>2. Scope of Work & Deliverables</h2>
-            <p>The Creator agrees to produce, deliver, and publish social media content endorsing the Brand's products/services:</p>
-            <ul>
-                <li><strong>Deliverables:</strong> One (1) Reel & Two (2) Stories</li>
-            </ul>
-        </div>
+        function handleLogin(e) {
+            e.preventDefault();
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            const remember = document.getElementById('remember').checked;
+            const errorMsg = document.getElementById('error-msg');
 
-        <div class="section">
-            <h2>3. Payment Terms</h2>
-            <p>In consideration of the full and satisfactory performance of the deliverables outlined above, the Creator shall be compensated as follows:</p>
-            <ul>
-                <li><strong>Total Compensation:</strong> ₹18,000</li>
-                <li><strong>Payment Timeline:</strong> The payment will be made in full within <strong>two (2) days</strong> after the completion and publishing of all deliverables.</li>
-            </ul>
-        </div>
+            let role = '';
+            if (user === 'Shivangi@22' && pass === 'Shivangi@22') {
+                role = 'creator';
+            } else if (user === 'yash1122' && pass === 'yash1122') {
+                role = 'admin';
+            }
 
-        <div class="section">
-            <h2>4. Content Guidelines & Usage</h2>
-            <ul>
-                <li><strong>Content Retention:</strong> The Creator must keep the content live on their profile and ensure it is not deleted, archived, or hidden for at least <strong>five (5) days</strong>.</li>
-                <li><strong>Usage Rights:</strong> The Creator grants the Brand and the Agency the full usage rights to repurpose and utilize the generated content for promotional purposes.</li>
-            </ul>
-        </div>
+            if (role) {
+                errorMsg.style.display = 'none';
+                window.currentUserRole = role;
 
-        <hr>
+                if (remember) {
+                    if (role === 'admin') localStorage.setItem('isAdmin', 'true');
+                    else localStorage.setItem('isLoggedIn', 'true');
+                } else {
+                    if (role === 'admin') sessionStorage.setItem('isAdmin', 'true');
+                    else sessionStorage.setItem('isLoggedIn', 'true');
+                }
 
-        <div class="agreement-section">
-            <div class="checkbox-container">
-                <input type="checkbox" id="chk-gaming">
-                <label for="chk-gaming">I agree to the terms and conditions mentioned above.</label>
-            </div>
-            <button id="btn-gaming" class="submit-btn" disabled onclick="submitForm('567r')">Submit Agreement</button>
-        </div>
-    </div>
+                document.getElementById('login-container').style.display = 'none';
+                showMainContent();
 
-</div>
-
-<!-- Success Modal Overlay -->
-<div class="modal-overlay" id="successModal">
-    <div class="modal">
-        <div class="modal-icon">
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-            </svg>
-        </div>
-        <h3>Done!</h3>
-        <p id="modalMessage">Agreement has been successfully submitted.</p>
-        <button class="modal-btn" onclick="closeModal()">Close</button>
-    </div>
-</div>
-
-<script>
-    function switchCard(id, event) {
-        document.querySelectorAll('.document-card').forEach(card => card.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        
-        document.getElementById(id).classList.add('active');
-        event.currentTarget.classList.add('active');
-    }
-
-    // Handle enabling/disabling of submit button based on checkbox status
-    document.getElementById('chk-mama').addEventListener('change', function() {
-        if(!this.disabled) {
-            document.getElementById('btn-mama').disabled = !this.checked;
+                if (localStorage.getItem('mamaearth_submitted') === 'true') {
+                    disableAgreement('mama');
+                }
+                if (localStorage.getItem('gaming_submitted') === 'true') {
+                    disableAgreement('gaming');
+                }
+            } else {
+                errorMsg.style.display = 'block';
+                errorMsg.innerText = 'Invalid username or password.';
+            }
         }
-    });
 
-    document.getElementById('chk-gaming').addEventListener('change', function() {
-        if(!this.disabled) {
-            document.getElementById('btn-gaming').disabled = !this.checked;
+        function showMainContent() {
+            document.getElementById('main-container').style.display = 'block';
         }
-    });
 
-    function submitForm(brand) {
-        // Show success modal
-        const messageEl = document.getElementById('modalMessage');
-        messageEl.innerText = brand + ' Agreement has been successfully submitted by Shibangi Yadav.';
-        document.getElementById('successModal').classList.add('active');
+        function switchCard(id, event) {
+            document.querySelectorAll('.document-card').forEach(card => card.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
 
-        // Disable checkbox and button
-        if(brand === 'Mamaearth') {
-            document.getElementById('chk-mama').disabled = true;
-            let btn = document.getElementById('btn-mama');
-            btn.disabled = true;
-            btn.innerText = "Submitted";
-        } else {
-            document.getElementById('chk-gaming').disabled = true;
-            let btn = document.getElementById('btn-gaming');
-            btn.disabled = true;
-            btn.innerText = "Submitted";
+            document.getElementById(id).classList.add('active');
+            event.currentTarget.classList.add('active');
         }
-    }
 
-    function closeModal() {
-        document.getElementById('successModal').classList.remove('active');
-    }
-</script>
+        document.getElementById('chk-mama').addEventListener('change', function () {
+            if (window.currentUserRole === 'admin' && !this.checked) {
+                localStorage.removeItem('mamaearth_submitted');
+                let btn = document.getElementById('btn-mama');
+                btn.disabled = true;
+                btn.innerText = "Submit Agreement";
+                return;
+            }
+            if (!this.disabled) {
+                document.getElementById('btn-mama').disabled = !this.checked;
+            }
+        });
+
+        document.getElementById('chk-gaming').addEventListener('change', function () {
+            if (window.currentUserRole === 'admin' && !this.checked) {
+                localStorage.removeItem('gaming_submitted');
+                let btn = document.getElementById('btn-gaming');
+                btn.disabled = true;
+                btn.innerText = "Submit Agreement";
+                return;
+            }
+            if (!this.disabled) {
+                document.getElementById('btn-gaming').disabled = !this.checked;
+            }
+        });
+
+        function disableAgreement(prefix) {
+            const chk = document.getElementById('chk-' + prefix);
+            const btn = document.getElementById('btn-' + prefix);
+            if (chk) {
+                chk.checked = true;
+                chk.disabled = window.currentUserRole !== 'admin';
+            }
+            if (btn) {
+                btn.disabled = true;
+                btn.innerText = "Submitted";
+            }
+        }
+
+        function submitForm(brand) {
+            const messageEl = document.getElementById('modalMessage');
+            messageEl.innerText = brand + ' Agreement has been successfully submitted by Shivangi Yadav.';
+            document.getElementById('successModal').classList.add('active');
+
+            if (brand === 'Mamaearth') {
+                disableAgreement('mama');
+                localStorage.setItem('mamaearth_submitted', 'true');
+            } else {
+                disableAgreement('gaming');
+                localStorage.setItem('gaming_submitted', 'true');
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('successModal').classList.remove('active');
+        }
+    </script>
 
 </body>
+
 </html>
